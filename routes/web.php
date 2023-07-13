@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +18,7 @@ Route::view('/','home')->name('home');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/p', [MailController::class, 'index'])->name('home');
+Route::get('/mail/crear',[MailController::class, 'create'])->name("mails.create");
+Route::post('/mail', [MailController::class, 'store'])->name("mails.store");

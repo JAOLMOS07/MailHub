@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('mails', function (Blueprint $table) {
             $table->id();
+            $table->string('asunto');
+            $table->text('contenido');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_destination_id');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_destination_id')->references('id')->on('users');
+            $table->boolean('importante')->default(false);
             $table->timestamps();
         });
     }

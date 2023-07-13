@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mail;
+use App\Models\User;
 use App\Http\Requests\StoreMailRequest;
 use App\Http\Requests\UpdateMailRequest;
 
@@ -13,7 +14,7 @@ class MailController extends Controller
      */
     public function index()
     {
-        //
+        return auth()->user()->Mails;
     }
 
     /**
@@ -21,7 +22,9 @@ class MailController extends Controller
      */
     public function create()
     {
-        //
+        return view('mails.create',[
+            'mail' => new Mail,
+        ]);
     }
 
     /**
@@ -29,7 +32,17 @@ class MailController extends Controller
      */
     public function store(StoreMailRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+        Mail::create([
+            'asunto' => $validatedData['subject'],
+            'contenido' => $validatedData['content'],
+            'user_id' => auth()->user()->id,
+            'user_destination_id' => User::where('email', $validatedData['email'])->first()->id,
+            'importante' => false
+            
+        ]);
+    
+        return redirect()->route('home')->with('status', "Mail enviado con éxito.");
     }
 
     /**
@@ -37,7 +50,7 @@ class MailController extends Controller
      */
     public function show(Mail $mail)
     {
-        //
+        
     }
 
     /**
