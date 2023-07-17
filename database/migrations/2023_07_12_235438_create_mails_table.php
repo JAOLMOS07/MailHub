@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('user_destination_id')->references('id')->on('users');
             $table->boolean('importante')->default(false);
+            $table->boolean('visto')->default(false);
             $table->timestamps();
         });
     }

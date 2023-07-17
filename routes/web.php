@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MailController;
-
+App::setLocale('es');
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,11 +14,17 @@ use App\Http\Controllers\MailController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::view('/','home')->name('home');
 
 Auth::routes();
 
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/p', [MailController::class, 'index'])->name('home');
+Route::get('/bandeja', [MailController::class, 'index'])->name('bandeja');
+Route::get('/visto/{mail}', [MailController::class, 'visto'])->name('visto');
+
+Route::get('/enviados', [MailController::class, 'enviados'])->name('enviados');
+
+Route::get('/bandeja/{mail}', [MailController::class, 'show'])->name('bandeja.show');
 Route::get('/mail/crear',[MailController::class, 'create'])->name("mails.create");
 Route::post('/mail', [MailController::class, 'store'])->name("mails.store");

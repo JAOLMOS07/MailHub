@@ -11,7 +11,7 @@
                 method="post" 
                 action="{{route('mails.store')}}">
                 @csrf   
-                <h1 class="display-4">@lang("Send Emal")</h1>
+                <h1 class="display-4">@lang("Redactar") @lang("Email")</h1>
                 <hr>  
                 
                 <div class="form-group">
@@ -59,7 +59,7 @@
                 <br>
                 <div class="form-group form-check">
                     <input type="checkbox" class="form-check-input" id="importante" name="importante">
-                    <label class="form-check-label" for="importante">@lang("Importante")</label>
+                    <label class="form-check-label" for="importante">@lang("Important")</label>
                 </div>
                 @error('importante')
                 <span class="invalid-feedback" role="alert">

@@ -12,9 +12,30 @@ class MailController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function __construct()
     {
-        return auth()->user()->Mails;
+        $this->middleware('auth');
+    }
+    public function index()
+    {   
+        $mails = Mail::where('user_destination_id', auth()->user()->id)
+                ->latest()
+                ->paginate();
+        
+        return view('mails.index',[
+            'mails' => $mails,
+            ''
+        ]);
+    }
+    public function enviados()
+    {   
+        $mails = Mail::where('user_id', auth()->user()->id)
+                ->latest()
+                ->paginate();
+        return view('mails.enviados',[
+            'mails' => $mails,
+            ''
+        ]);
     }
 
     /**
@@ -33,12 +54,17 @@ class MailController extends Controller
     public function store(StoreMailRequest $request)
     {
         $validatedData = $request->validated();
+        $importante = false;
+        if($request->importante != null){
+            $importante = true;
+        }
         Mail::create([
             'asunto' => $validatedData['subject'],
             'contenido' => $validatedData['content'],
             'user_id' => auth()->user()->id,
             'user_destination_id' => User::where('email', $validatedData['email'])->first()->id,
-            'importante' => false
+            'importante' => $importante,
+            'visto' => false
             
         ]);
     
@@ -50,7 +76,9 @@ class MailController extends Controller
      */
     public function show(Mail $mail)
     {
-        
+        return view('mails.show',[
+            'mail' => $mail,
+        ]);
     }
 
     /**
@@ -68,7 +96,20 @@ class MailController extends Controller
     {
         //
     }
-
+    public function visto( Mail $mail)
+    {
+        $oldmail = $mail;
+        $mail['visto'] = 1;
+        $oldmail->update([
+            'asunto' => $mail['asunto'],
+            'contenido' => $mail['contenido'],
+            'user_id' => $mail['user_id'],
+            'user_destination_id' => $mail['user_destination_id'],
+            'importante' => $mail['importante'],
+            'visto' => true
+        ]);
+        return redirect()->route('bandeja.show',$mail);
+    }
     /**
      * Remove the specified resource from storage.
      */

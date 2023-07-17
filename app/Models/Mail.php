@@ -18,4 +18,10 @@ class Mail extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function userTo()
+    {
+        return $this->belongsTo(User::class,'user_destination_id');
+    }
+
+    
 }
